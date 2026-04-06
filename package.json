@@ -1,0 +1,20 @@
+{
+  "name": "book-store",
+  "version": "1.0.0",
+  "description": "bokk store",
+  "license": "ISC",
+  "author": "ahmed sabbagh",
+  "type": "commonjs",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "joi": "^18.1.2",
+    "mongoose": "^9.4.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
