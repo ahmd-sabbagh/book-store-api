@@ -1,20 +1,12 @@
 const express = require("express");
-const Joi = require("joi");
+
 const router = express.Router();
 
-const { Auther } = require("../models/Authers");
-
-// Auther
-
-const authers = [
-  {
-    id: 1,
-    firstName: "ahmed",
-    lastName: "said",
-    nationality: "egypt",
-    image: "default-image.png",
-  },
-];
+const {
+  Auther,
+  validateUpdateAuthers,
+  validateCreateNewAuthers,
+} = require("../models/Authers");
 
 /**
  * @desc Get All Authers
@@ -83,6 +75,7 @@ router.post("/", async (req, res) => {
     res.status(500).json({ message: "somthing went wrong" });
   }
 });
+
 /**
  * @desc Update Auther
  * @router /api/authers/:id
@@ -113,34 +106,33 @@ router.put("/:id", async (req, res) => {
         new: true,
       },
     );
-    res.status(201).json(newAuther)
+    res.status(201).json(newAuther);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "somthing went wrong" });
   }
 });
 
-// Validate Create Auther
-function validateCreateNewAuthers(obj) {
-  const schema = Joi.object({
-    firstName: Joi.string().trim().min(3).max(50).required(),
-    lastName: Joi.string().trim().min(3).max(40).required(),
-    nationality: Joi.string().trim().min(3).max(100).required(),
-    image: Joi.string().trim().min(3).max(100),
-  });
+/**
+ * @desc Update Auther
+ * @router /api/authers/:id
+ * @method Put
+ * @access public
+ */
 
-  return schema.validate(obj);
-}
-// Validate Update Auther
-function validateUpdateAuthers(obj) {
-  const schema = Joi.object({
-    firstName: Joi.string().trim().min(3).max(50),
-    lastName: Joi.string().trim().min(3).max(40),
-    nationality: Joi.string().trim().min(3).max(100),
-    image: Joi.string().trim().min(3).max(100),
-  });
-
-  return schema.validate(obj);
-}
+router.delete("/:id", async (req, res) => {
+  try {
+    const auther = await Auther.findById(req.params.id);
+    if (auther) {
+      await Auther.findByIdAndDelete(req.params.id);
+      res.status(200).json({ message: "Auther has been deleted" });
+    } else {
+      res.status(404).json({ message: "auther not founde" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "somthing went wrong" });
+  }
+});
 
 module.exports = router;
