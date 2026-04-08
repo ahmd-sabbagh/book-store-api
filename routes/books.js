@@ -19,7 +19,11 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const booksList = await Books.find().populate("auther");
+    const booksList = await Books.find().populate("auther", [
+      "id",
+      "firstName",
+      "lastName",
+    ]);
     res.status(200).json(booksList);
   } catch (error) {
     console.log(error);
@@ -36,7 +40,8 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   try {
-    const book = await Books.findById(req.params.id);
+    console.log(req.params.id);
+    const book = await Books.findById(req.params.id).populate("auther");
     if (book) {
       res.status(200).json(book);
     } else {
